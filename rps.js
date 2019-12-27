@@ -1,11 +1,6 @@
+//Initialise variables
 let playerWins = 0;
 let comWins = 0;
-
-function playerInput() {
-    const selection = prompt("Rock, Paper or Scissors?");
-    console.log(selection + " has been selected!");
-    return selection;
-}
 
 function computerPlay() {
     const options = ["rock", "paper", "scissors"];
@@ -13,49 +8,57 @@ function computerPlay() {
 }
 
 function round(playerSelection, computerSelection) {
-    const player = playerSelection.toLowerCase();
-    const com = computerSelection;
-    if (player == com) {
-        return "Its a Draw! You both chose " + player;
-    } else if (player == "rock") {
-        if (com == "paper") {
+    if (playerSelection == computerSelection) {
+        return "Its a Draw! You both chose " + playerSelection;
+    } else if (playerSelection == "rock") {
+        if (computerSelection == "paper") {
             comWins ++;
             return "You Lose! Paper beats Rock";
-        } else if (com == "scissors") {
+        } else if (computerSelection == "scissors") {
             playerWins ++;
             return "You Win! Rock beats Scissors";
         }
-    } else if (player == "paper") {
-        if (com == "rock") {
+    } else if (playerSelection == "paper") {
+        if (computerSelection == "rock") {
             playerWins ++;
             return "You Win! Paper beats Rock";
-        } else if (com == "scissors") {
+        } else if (computerSelection == "scissors") {
             comWins ++;
             return "You Lose! Scissors beats Paper!";
         }
-    } else if (player == "scissors") {
-        if (com == "rock") {
+    } else if (playerSelection == "scissors") {
+        if (computerSelection == "rock") {
             comWins ++;
             return "You Lose! Rock beats Scissors!";
-        } else if (com == "paper") {
+        } else if (computerSelection == "paper") {
             playerWins ++;
             return "You Win! Scissors beats Paper!";
         }
     }
 }
 
-for(let i = 0; i <= 5; i ++) {
-    console.log(round(playerInput(), computerPlay()));
-    console.log("Player: " + playerWins + ", Computer: " + comWins);
-    if (comWins == 3 || playerWins == 3) {
-        break;
-    } else {}
-}
+//Creating nodelist of all buttons
+const buttons = document.querySelectorAll('button');
 
-if (comWins == playerWins) {
-    console.log("Its a Draw! Refresh the browser to play again");
-} else if (comWins > playerWins) {
-    console.log("You Lose! Refresh the browser to try again")
-} else {
-    console.log("You Win! Refresh the browser to play again")
-}
+//Interating through each button
+buttons.forEach((button) => {
+    button.addEventListener('click', function(e) {
+        if (comWins >= 5) {
+            document.getElementById("score").innerHTML = "You Won the game! Hit Reset to play again";
+        } else if (playerWins >= 5) {
+            document.getElementById("score").innerHTML = "You Lost the game! Hit Reset to play again";
+        } else {
+            document.getElementById("message").innerHTML = round(button.id, computerPlay());
+            document.getElementById("score").innerHTML = "Current Score:<br>You: " +
+                playerWins + "<br>Com: " + comWins;
+        }
+    });
+});
+
+//Reset button
+buttons.item(3).addEventListener('click', function(e) {
+    document.getElementById("message").innerHTML = "Welcome to Rock, Paper Scissors!<br>Click a button above to begin";
+    document.getElementById("score").innerHTML = "";
+    playerWins = 0;
+    comWins = 0;
+});
